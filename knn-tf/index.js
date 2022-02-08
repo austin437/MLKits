@@ -24,8 +24,16 @@ let { features, labels, testFeatures, testLabels } = loadCSV("kc_house_data.csv"
     labelColumns: ["price"],
 });
 
+// console.log('features', features);
+// console.log('labels', labels);
+// console.log('testFeatures', testFeatures);
+// console.log('testLabels', testLabels);
+
 features = tf.tensor(features);
 labels = tf.tensor(labels);
 
-const result = knn(features, labels, tf.tensor(testFeatures[0]), 10);
-console.log("Guess", result, testLabels[0][0]);
+testFeatures.forEach((testPoint, i) => {
+    const result = knn(features, labels, tf.tensor(testPoint), 10);
+    const err = (testLabels[i][0] - result) / testLabels[i][0];
+    console.log("Error", err * 100);
+});
