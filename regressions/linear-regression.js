@@ -42,6 +42,8 @@ module.exports = class LinearRegression {
 
         this.m = this.m - mSlope * this.options.learningRate;
         this.b = this.b - bSlope * this.options.learningRate;
+
+        console.log("m:", this.m, "b:", this.b);
     }
 
     train() {
