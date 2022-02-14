@@ -6,7 +6,16 @@ class LinearRegression {
         this.labels = labels;
 
         //modify to use this.options = {learningRate: 0.1, someDefaultVal: 3.4, ...options};
-        this.options = Object.assign({ learningRate: 0.1 }, options);
+        this.options = Object.assign(
+            { learningRate: 0.1, iterations: 1000 },
+            options
+        );
+    }
+
+    train() {
+        for (let i = 0; i < this.options.iterations; i++) {
+            this.gradientDescent();
+        }
     }
 }
 
