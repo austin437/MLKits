@@ -22,7 +22,14 @@ module.exports = class LinearRegression {
         this.weights = this.weights.sub(slopes.mul(this.options.learningRate));
     }
 
-    // manual algorithm
+    train() {
+        for (let i = 0; i < this.options.iterations; i++) {
+            this.gradientDescent();
+        }
+    }
+};
+
+  // manual algorithm
     // gradientDescent() {
     //     const currentGuessesForMPG = this.features.map((row) => {
     //         return this.m * row[0] + this.b;
@@ -51,10 +58,3 @@ module.exports = class LinearRegression {
 
     //     console.log("m:", this.m, "b:", this.b);
     // }
-
-    train() {
-        for (let i = 0; i < this.options.iterations; i++) {
-            this.gradientDescent();
-        }
-    }
-};
