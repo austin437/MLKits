@@ -29,8 +29,6 @@ module.exports = class LinearRegression {
         testFeatures = this.processFeatures(testFeatures);
         testLabels = tf.tensor(testLabels);
 
-      
-
         // the m and b variables (weights) have now been tuned to their optimal values
         const predictions = testFeatures.matMul(this.weights);
 
@@ -43,8 +41,18 @@ module.exports = class LinearRegression {
     processFeatures(features) {
         features = tf.tensor(features);
         features = tf.ones([features.shape[0], 1]).concat(features, 1);
+        features = this.standardize(features);
 
         return features;
+    }
+
+    standardize(features) {
+        if (!(this.mean && this.variance)) {
+            const { mean, variance } = tf.moments(features, 0);
+            this.mean = mean;
+            this.variance = variance;
+        }
+        return features.sub(this.mean).div(this.variance.pow(0.5));
     }
 };
 
