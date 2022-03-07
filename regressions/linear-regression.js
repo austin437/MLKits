@@ -40,8 +40,8 @@ module.exports = class LinearRegression {
 
     processFeatures(features) {
         features = tf.tensor(features);
-        features = tf.ones([features.shape[0], 1]).concat(features, 1);
         features = this.standardize(features);
+        features = tf.ones([features.shape[0], 1]).concat(features, 1);
 
         return features;
     }
