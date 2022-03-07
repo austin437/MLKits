@@ -3,11 +3,8 @@ const _ = require("lodash");
 
 module.exports = class LinearRegression {
     constructor(features, labels, options) {
-        this.features = tf.tensor(features);
+        this.features = this.processFeatures(features);
         this.labels = tf.tensor(labels);
-
-        // create a tensor of 1s and concat onto features
-        this.features = tf.ones([this.features.shape[0], 1]).concat(this.features, 1);
 
         //modify to use this.options = {learningRate: 0.1, someDefaultVal: 3.4, ...options};
         this.options = Object.assign({ learningRate: 0.1, iterations: 1000 }, options);
@@ -29,10 +26,10 @@ module.exports = class LinearRegression {
     }
 
     test(testFeatures, testLabels) {
-        testFeatures = tf.tensor(testFeatures);
+        testFeatures = this.processFeatures(testFeatures);
         testLabels = tf.tensor(testLabels);
 
-        testFeatures = tf.ones([testFeatures.shape[0], 1]).concat(testFeatures, 1);
+      
 
         // the m and b variables (weights) have now been tuned to their optimal values
         const predictions = testFeatures.matMul(this.weights);
@@ -41,6 +38,13 @@ module.exports = class LinearRegression {
         const tot = testLabels.sub(testLabels.mean()).pow(2).sum().arraySync();
 
         return 1 - res / tot;
+    }
+
+    processFeatures(features) {
+        features = tf.tensor(features);
+        features = tf.ones([features.shape[0], 1]).concat(features, 1);
+
+        return features;
     }
 };
 
