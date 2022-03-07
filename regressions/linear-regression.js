@@ -37,8 +37,8 @@ module.exports = class LinearRegression {
         // the m and b variables (weights) have now been tuned to their optimal values
         const predictions = testFeatures.matMul(this.weights);
 
-        const res = testLabels.sub(predictions).pow(2).sum().get();
-        const tot = testLabels.sub(testLabels.mean()).pow(2).sum().get();
+        const res = testLabels.sub(predictions).pow(2).sum().arraySync();
+        const tot = testLabels.sub(testLabels.mean()).pow(2).sum().arraySync();
 
         return 1 - res / tot;
     }
