@@ -5,6 +5,7 @@ module.exports = class LinearRegression {
     constructor(features, labels, options) {
         this.features = this.processFeatures(features);
         this.labels = tf.tensor(labels);
+        this.mseHistory = [];
 
         //modify to use this.options = {learningRate: 0.1, someDefaultVal: 3.4, ...options};
         this.options = Object.assign({ learningRate: 0.1, iterations: 1000 }, options);
@@ -21,7 +22,10 @@ module.exports = class LinearRegression {
 
     train() {
         for (let i = 0; i < this.options.iterations; i++) {
+            //console.log("Learning Rate:", this.options.learningRate);
             this.gradientDescent();
+            this.recordMSE();
+            this.updateLearningRate();
         }
     }
 
@@ -53,6 +57,28 @@ module.exports = class LinearRegression {
             this.variance = variance;
         }
         return features.sub(this.mean).div(this.variance.pow(0.5));
+    }
+
+    recordMSE() {
+        const mse = this.features
+            .matMul(this.weights)
+            .sub(this.labels)
+            .pow(2)
+            .sum()
+            .div(this.features.shape[0])
+            .dataSync()[0];
+
+        this.mseHistory.unshift(mse);
+    }
+
+    updateLearningRate() {
+        if (this.mseHistory.length < 2) return;
+
+        if (this.mseHistory[0] > this.mseHistory[1]) {
+            this.options.learningRate /= 2;
+        } else {
+            this.options.learningRate *= 1.05;
+        }
     }
 };
 
