@@ -22,7 +22,6 @@ module.exports = class LinearRegression {
 
     train() {
         for (let i = 0; i < this.options.iterations; i++) {
-            //console.log("Learning Rate:", this.options.learningRate);
             this.gradientDescent();
             this.recordMSE();
             this.updateLearningRate();
